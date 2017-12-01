@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <v-list>
-      <draggable v-model="todoList" :options="{group:'people'}" @start="drag=true" @end="drag=false">
+      <!-- <draggable v-model="todoList" :options="{group:'people'}" @start="drag=true" @end="drag=false"> -->
         <v-list-tile avatar v-for="item in todoList" v-bind:key="item.id" @click="clickTodo(item.id)">
           <v-list-tile-action>
             <v-icon v-if="item.done" color="pink">star</v-icon>
@@ -12,8 +12,9 @@
           <v-list-tile-avatar>
             <img v-bind:src="item.avatar"/>
           </v-list-tile-avatar>
+           <v-icon @click="deleteTodo(item.id)" >delete</v-icon>
         </v-list-tile>
-      </draggable>
+      <!-- </draggable> -->
     </v-list>
    <todo :todo="todo" ></todo>
   </div>
@@ -33,9 +34,12 @@ export default {
     };
   },
   methods: {
-    // clickTodo: function(id) {
-    //   this.todo = this.todoList().filter(item => item.id === id);
-    // }
+    clickTodo: function(id) {
+      this.todo = this.todoList().filter(item => item.id === id);
+    },
+    deleteTodo: function(id) {
+      this.$store.dispatch('deleteTodo', id);
+    }
   },
   computed: {
     todoList() {

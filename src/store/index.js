@@ -8,7 +8,11 @@ const store = new Vuex.Store({
     todoList: [
       {
         id: 1,
-        title: 'adfa'
+        title: 'первый'
+      },
+      {
+        id: 2,
+        title: 'второй'
       }
     ]
   },
@@ -20,15 +24,21 @@ const store = new Vuex.Store({
   mutations: {
     set(state, { type, item }) {
       state[type] = item;
+    },
+    push(state, { type, item }) {
+     state[type].push(item);
+    },
+    delete(state, { type, item }) {
+     state[type] = state[type].filter(el => el.id !== item);
     }
   },
   actions: {
     addTodo({ commit }, data) {
-      const newTodoList = this.state.todoList.slice();
-      console.log(newTodoList);
-      newTodoList.push(data);
-      commit('set', { type: 'todoList', newTodoList });
-    }
+      commit('push', { type: 'todoList', item: data });
+    },
+    deleteTodo({ commit }, id) {
+      commit('delete', { type: 'todoList', item: id });
+    },
   }
 });
 
