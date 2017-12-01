@@ -8,11 +8,13 @@ const store = new Vuex.Store({
     todoList: [
       {
         id: 1,
-        title: 'первый'
+        title: 'первый',
+        done: false
       },
       {
         id: 2,
-        title: 'второй'
+        title: 'второй',
+        done: false
       }
     ]
   },
@@ -26,10 +28,20 @@ const store = new Vuex.Store({
       state[type] = item;
     },
     push(state, { type, item }) {
-     state[type].push(item);
+      state[type].push(item);
     },
     delete(state, { type, item }) {
-     state[type] = state[type].filter(el => el.id !== item);
+      state[type] = state[type].filter(el => el.id !== item);
+    },
+    update(state, { type, item }) {
+      state[type] = state[type].map(el => {
+        console.log(el);
+        if (el.id === item) {
+          el.done = !el.done;
+        }
+        return el;
+        
+      });
     }
   },
   actions: {
@@ -39,6 +51,9 @@ const store = new Vuex.Store({
     deleteTodo({ commit }, id) {
       commit('delete', { type: 'todoList', item: id });
     },
+    updateTodo({ commit }, id) {
+      commit('update', { type: 'todoList', item: id });
+    }
   }
 });
 

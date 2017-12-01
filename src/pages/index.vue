@@ -57,7 +57,8 @@ export default {
       if (!this.title) return;
       const data = {
         id: Date.now(),
-        title: this.title
+        title: this.title,
+        done: false
       };
       this.$store.dispatch('addTodo', data);
       this.title = '';
