@@ -16,11 +16,15 @@ const store = new Vuex.Store({
         title: 'второй',
         done: false
       }
-    ]
+    ],
+    todo: {}
   },
   getters: {
     todoList(state) {
       return state.todoList;
+    },
+    todo(state) {
+      return state.todo;
     }
   },
   mutations: {
@@ -33,26 +37,34 @@ const store = new Vuex.Store({
     delete(state, { type, item }) {
       state[type] = state[type].filter(el => el.id !== item);
     },
-    update(state, { type, item }) {
+    updateId(state, { type, item }) {
       state[type] = state[type].map(el => {
-        console.log(el);
         if (el.id === item) {
           el.done = !el.done;
         }
         return el;
         
       });
+    },
+    update(state, { type, item }) {
+      state[type] = { ...state[type], item }
     }
   },
   actions: {
     addTodo({ commit }, data) {
       commit('push', { type: 'todoList', item: data });
     },
+    todo({ commit }, data) {
+      commit('set', { type: 'todo', item: data });
+    },
     deleteTodo({ commit }, id) {
       commit('delete', { type: 'todoList', item: id });
     },
     updateTodo({ commit }, id) {
-      commit('update', { type: 'todoList', item: id });
+      commit('updateId', { type: 'todoList', item: id });
+    },
+    updDescription({ commit }, todo) {
+      commit('update', { type: 'todoList', item: todo });
     }
   }
 });
