@@ -5,8 +5,12 @@
     class="grey lighten-3"
   >
     <v-toolbar color="pink">
-      <v-toolbar-title class="white--text">My ToDo List</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-toolbar-title class="white--text" @click="clickSortTodo">
+        <v-icon>{{iconSort.icon}}</v-icon>
+        My ToDo List</v-toolbar-title>
+        <v-spacer></v-spacer>
+
+
                <v-text-field
         append-icon="search"
         label="Search"
@@ -32,7 +36,7 @@
 
       <v-layout row wrap>
         <v-flex xs12>
-          <todo-list/>
+          <todo-list :searchTodo="searchTodo"/>
         </v-flex>
       
       
@@ -49,7 +53,23 @@ export default {
   data() {
     return {
       search: '',
-      title: ''
+      title: '',
+      sortCount: 1,
+      sortIcon: [
+        {
+          id: 0,
+          icon: ''
+        },
+        {
+          id: 1,
+          icon: 'arrow_upward'
+        },
+        {
+          id: 2,
+          icon: 'arrow_downward'
+        }
+      ],
+      iconSort: {}
     };
   },
   methods: {
@@ -62,6 +82,31 @@ export default {
       };
       this.$store.dispatch('addTodo', data);
       this.title = '';
+    },
+    clickSortTodo() {
+      const coutn = this.sortCount++ % 3;
+      const answer = this.sortIcon.filter(item => item.id === coutn);
+      this.iconSort = answer[0];
+      return answer;
+    }
+  },
+  computed: {
+    sortTodo() {
+      switch (this.iconSort.id) {
+        case 1:
+          return this.$store.state.todoList.sort((one, two) => two.title > one.title);
+          break;
+        case 2:
+          return this.$store.state.todoList.sort((one, two) => two.title < one.title);
+          break;
+        default:
+          return this.$store.state.todoList;
+      }
+    },
+
+    searchTodo() {
+      const search = this.search.toUpperCase();
+      return this.sortTodo.filter(item => ~item.title.toUpperCase().indexOf(search));
     }
   }
 };

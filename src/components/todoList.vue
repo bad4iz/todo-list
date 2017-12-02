@@ -2,16 +2,14 @@
   <div class="hello">
     <v-list>
       <draggable  :options="{group:'people'}" @start="drag=true" @end="drag=true">
-        <v-list-tile  v-for="item in todoList" v-bind:key="item.id" @click="clickTodo(item.id)">
+        <v-list-tile  v-for="item in searchTodo" v-bind:key="item.id" @click="clickTodo(item.id)">
           <v-list-tile-action>
             <v-icon v-if="item.done" color="pink">star</v-icon>
           </v-list-tile-action>
           <v-list-tile-content  v-bind:class="{ done: item.done }">
             <v-list-tile-title v-text="item.title"></v-list-tile-title>
           </v-list-tile-content>
-          <v-list-tile-avatar>
-            <img v-bind:src="item.avatar"/>
-          </v-list-tile-avatar>
+      
            <v-icon @click="deleteTodo(item.id)" >delete</v-icon>
         </v-list-tile>
       </draggable>
@@ -27,6 +25,7 @@ import draggable from 'vuedraggable';
 export default {
   name: 'todoLIst',
   components: { draggable, Todo },
+  props: ['searchTodo'],
   data() {
     return {};
   },
@@ -39,9 +38,7 @@ export default {
     }
   },
   computed: {
-    todoList() {
-      return this.$store.state.todoList;
-    }
+   
   }
 };
 </script>
